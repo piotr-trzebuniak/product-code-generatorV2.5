@@ -1,0 +1,22 @@
+.input {
+  background: #f9f8fd;
+  border-radius: 10px;
+  margin-bottom: 1.2em;
+  padding: 0.8em 2em 0.8em 1em;
+  border: 1px solid #dcdcdc;
+  width: 100%;
+  font-weight: 300;
+  &::placeholder {
+    color: gray;
+    font-size: 1.4rem;
+    line-height: 20px;
+    font-family: "Lexend Deca", sans-serif;
+  }
+  &:focus {
+    outline: none;
+  }
+  &:disabled {
+    background-color: #f8f7fd;
+    opacity: 0.75;
+  }
+}

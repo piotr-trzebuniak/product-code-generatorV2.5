@@ -1,0 +1,437 @@
+.generator {
+  color: #000;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1400px;
+  font-family: "Lexend Deca", sans-serif;
+  padding-bottom: 60px;
+  text-align: center;
+
+  // h2 {
+  //   text-align: center;
+  // }
+
+  &__copyBtns{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+  }
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em;
+  }
+  &__grid2 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1em;
+  }
+
+  &__selects {
+    display: flex;
+    gap: 1em;
+  }
+  &__select {
+    width: 100%;
+
+    h4 {
+      margin: 1em 0;
+    }
+  }
+
+  &__cosmetics {
+    &-columns {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1em;
+    }
+  }
+
+  &__editor {
+    text-align: left;
+    h4 {
+      text-align: center;
+      margin: 1em 0;
+    }
+  }
+
+  &__deleteBtn {
+    background-color: rgb(228, 4, 4) !important;
+  }
+  &__resetBtn {
+    background-color: rgb(228, 4, 4) !important;
+    width: 100%;
+    margin-bottom: 2em !important;
+
+    &:hover {
+      background-color: rgb(187, 5, 5) !important;
+    }
+  }
+  &__generateBtn {
+    width: 70%;
+    margin: 2em 0 !important;
+  }
+
+  &__header {
+    margin-top: 3em;
+
+    h2 {
+      text-transform: uppercase;
+      font-size: 4rem;
+    }
+
+    &-btns {
+      margin-top: 2em;
+      width: 100%;
+      text-align: center;
+
+      button {
+        min-width: 40%;
+      }
+    }
+    &-btns2 {
+      margin-top: 1em;
+      width: 100%;
+      text-align: center;
+
+      button {
+        min-width: 40%;
+        background: #0177FD;
+      }
+    }
+  }
+
+  &__content {
+    margin-top: 2em;
+    padding: 1em;
+  }
+  &__table {
+    margin-top: 2em;
+
+    span {
+      padding-bottom: 1em;
+      display: inline-block;
+    }
+  }
+  &__tableHeadings {
+    display: flex;
+    gap: 1em;
+    input {
+      padding: 1em 2em 1em 1em;
+      margin-bottom: 0.5em;
+    }
+  }
+  &__ingredient {
+    &-row {
+      display: flex;
+      gap: 1em;
+      input {
+        padding: 0.7em 2em 0.7em 1em;
+        margin-bottom: 0.5em;
+      }
+    }
+  }
+  &__basicInfo {
+    h3 {
+      margin-bottom: 1em;
+      display: inline-block;
+    }
+  }
+  &__specialFeatures {
+    h3 {
+      margin: 2em 0 1em 0;
+    }
+    &-checkbox {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5em;
+      input {
+        height: 20px;
+        width: 20px;
+      }
+      span {
+        margin-left: 0.5em;
+      }
+    }
+  }
+  &__checkboxes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  &__btns {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 30px;
+    align-items: center;
+    &__generateBtn,
+    &__copyBtns,
+    &__sheetBtns,
+    &__resetBtnContainer {
+      display: flex;
+      justify-content: center;
+      &__resetBtn {
+        background-color: #e74c3c;
+        color: white;
+        margin-top: 20px;
+      }
+
+      &__translationBtn {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      &__copyBtns,
+      &__sheetBtns {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+
+      &__translationStatus,
+      &__codeGeneratedInfo,
+      &__sheetStatus {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px 0;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      &__translationItem {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      &__loadingIcon,
+      &__successIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        margin-left: 10px;
+      }
+
+      &__spinner {
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(0, 0, 0, 0.1);
+        border-top-color: #3498db;
+        border-radius: 50%;
+        animation: spinner 1s linear infinite;
+      }
+
+      &__checkmark {
+        width: 20px;
+        height: 20px;
+        background-color: #2ecc71;
+        border-radius: 50%;
+        position: relative;
+
+        &:after {
+          content: "";
+          position: absolute;
+          width: 6px;
+          height: 10px;
+          border: solid white;
+          border-width: 0 2px 2px 0;
+          top: 4px;
+          left: 7px;
+          transform: rotate(45deg);
+        }
+      }
+
+      &__translateBtn,
+      &__generateBtn,
+      &__copyBtn,
+      &__sheetBtn,
+      &__resetBtn {
+        margin: 5px;
+        transition: all 0.3s ease;
+
+        &:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+      }
+
+      &__skipTranslateBtn {
+        background-color: #f39c12;
+        color: white;
+      }
+    }
+
+    @keyframes spinner {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  }
+}
+/* Dodatkowe style do dodania w pliku ProductCodeGenerator.module.scss */
+
+.translationError {
+  background-color: #ffe6e6;
+  border: 1px solid #ff9999;
+  border-radius: 4px;
+  padding: 15px;
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  p {
+    color: #cc0000;
+    margin: 0;
+    font-weight: 500;
+  }
+  
+  button {
+    margin-left: 15px;
+    white-space: nowrap;
+  }
+}
+
+.retryButton {
+  background-color: #ff8c00;
+  color: white;
+  
+  &:hover {
+    background-color: #e67e00;
+  }
+}
+
+.successButton {
+  background-color: #4CAF50;
+  color: white;
+  
+  &:hover {
+    background-color: #45a049;
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  margin-right: 5px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Style dla przycisków wyłączonych */
+button:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+  
+  &:hover {
+    background-color: #cccccc;
+  }
+}
+
+/* Style dla kontenerów przycisków */
+.generatorBtns__btns-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* Style dla sekcji przycisków */
+.generatorBtns__btns-section {
+  margin-bottom: 20px;
+  
+  h4 {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+  }
+}
+
+/* Style dla layoutu przycisków */
+.generatorBtns__container {
+  display: flex;
+  gap: 30px;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.generatorBtns__container-left,
+.generatorBtns__container-right {
+  flex: 1;
+}
+
+/* Dodatkowe style do dodania do istniejącego pliku CSS/SCSS */
+
+/* Styl dla komunikatu błędu tłumaczenia */
+.generator__translationError {
+  background-color: #ffecec;
+  border: 1px solid #f5aca6;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  span {
+    color: #cc0000;
+    font-weight: 500;
+    flex: 1;
+  }
+  
+  button {
+    margin-left: 15px;
+    background-color: #ff8c00;
+    
+    &:hover {
+      background-color: #e67e00;
+    }
+  }
+}
+
+/* Style dla podświetlonego przycisku resetowania po zakończeniu procesu */
+.generator__resetBtnHighlighted {
+  margin-top: 20px;
+  border-top: 2px dashed #4CAF50;
+  padding-top: 20px;
+  
+  button {
+    background-color: #4CAF50;
+    color: white;
+    
+    &:hover {
+      background-color: #45a049;
+    }
+  }
+}
+
+/* Styl dla przycisku ponownej próby tłumaczenia */
+.generator__retryBtn {
+  background-color: #ff8c00;
+  
+  &:hover {
+    background-color: #e67e00;
+  }
+}
+
+/* Animacja na ikony ładowania */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.generator__spinner {
+  animation: spin 1s linear infinite;
+}

@@ -1,0 +1,19 @@
+.textEditorContainer {
+  text-align: left;
+  h4 {
+    text-align: center;
+    margin: 1em 0;
+  }
+  &__btn {
+    display: flex;
+    justify-content: center;
+
+    button {
+      width: 50%;
+      margin-top: 1em;
+    }
+  }
+  &__btnRed {
+    background-color: rgb(228, 4, 4) !important;
+  }
+}

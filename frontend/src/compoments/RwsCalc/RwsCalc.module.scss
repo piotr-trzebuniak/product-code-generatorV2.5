@@ -1,0 +1,9 @@
+.rws {
+    margin-top: 1em;
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2em;
+    margin-top: 1em;
+  }
+}

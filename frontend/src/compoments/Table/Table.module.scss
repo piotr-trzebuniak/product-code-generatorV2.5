@@ -1,0 +1,52 @@
+.table {
+  margin-top: 2em;
+
+  &__tableHeadings {
+    input {
+      font-weight: 600;
+    }
+    
+  }
+
+  h4 {
+    padding-bottom: 1em;
+    display: inline-block;
+  }
+  &__tableHeadings {
+    display: flex;
+    gap: 1em;
+    input {
+      padding: 1em 2em 1em 1em;
+      margin-bottom: 0.5em;
+    }
+  }
+  &__ingredient {
+    &-row {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      position: relative;
+      input {
+        padding: 0.7em 2em 0.7em 1em;
+        margin-bottom: 0.5em;
+      }
+    }
+    &-delete {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      position: absolute;
+      right: -40px;
+    }
+    &-add {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      position: absolute;
+      right: -40px;
+    }
+    &-bold {
+      font-weight: 600;
+    }
+  }
+}

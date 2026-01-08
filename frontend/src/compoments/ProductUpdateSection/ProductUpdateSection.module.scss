@@ -1,0 +1,42 @@
+.checkboxes {
+  display: flex;
+  justify-content: space-around;
+  margin: 2em 0;
+  justify-self: center;
+
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5em;
+
+    input {
+      height: 20px;
+      width: 20px;
+      margin: 0 0.5em;
+    }
+
+  }
+}
+
+.input {
+  height: 100px;
+
+  ::placeholder {
+    margin: 0;
+  }
+}
+
+.input {
+  height: 100px;
+
+  ::placeholder {
+    margin: 0;
+  }
+}
+
+.searchBtn {
+  margin-bottom: 1.2em;
+  margin-top: 0;
+  width: 40%;
+  padding: 0.8em 2em 0.8em 1em;
+}
