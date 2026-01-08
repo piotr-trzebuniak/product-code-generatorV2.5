@@ -459,38 +459,44 @@ export const translateAllFields = async (
   }
 };
 
-
 export const translateText = async (text, targetLang) => {
-  try {
-    // const API_URL = 'http://localhost:3000';
-    const API_URL = import.meta.env.VITE_API_URL ||
-      (window.location.hostname === 'localhost'
-        ? 'http://localhost:3000'
-        : 'https://product-code-generatorv2-4.onrender.com');
+  const API_URL = import.meta.env.VITE_API_URL;
+  if (!API_URL) {
+    throw new Error("Brak VITE_API_URL. Ustaw w frontend/.env i na Vercel.");
+  }
 
+  try {
     const response = await fetch(`${API_URL}/translate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text, targetLang }),
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
 
-    if (!response.ok || !data.translatedText) {
-      throw new Error(`Tłumaczenie na język ${targetLang} nie powiodło się.`);
+    if (!response.ok) {
+      // backend może zwrócić { status, message } (np. 503 gdy brak DEEPL_AUTH_KEY)
+      const msg =
+        data?.message ||
+        `Tłumaczenie na język ${targetLang} nie powiodło się (HTTP ${response.status}).`;
+      throw new Error(msg);
+    }
+
+    if (!data?.translatedText) {
+      throw new Error(`Brak translatedText w odpowiedzi dla języka ${targetLang}.`);
     }
 
     let translated = data.translatedText;
 
     // Zastosowanie ręcznych poprawek
-    const overrides = manualTranslationOverrides[targetLang] || {};
+    const overrides = manualTranslationOverrides?.[targetLang] || {};
     for (const [plWord, correctTranslation] of Object.entries(overrides)) {
-      const regex = new RegExp(`\\b${plWord}\\b`, 'gi'); // tylko całe słowa
+      const regex = new RegExp(`\\b${plWord}\\b`, "gi"); // tylko całe słowa
       translated = translated.replace(regex, correctTranslation);
     }
 
     return translated;
   } catch (error) {
-    throw new Error(`Błąd tłumaczenia na język ${targetLang}: ${error.message}`);
+    throw new Error(`Błąd tłumaczenia na język ${targetLang}: ${error.message || error}`);
   }
 };

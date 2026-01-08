@@ -10,9 +10,9 @@ import Button from "../Button/Button";
 
 const SHEET_NAME = "IMPORT SKLEP";
 
-// Jeśli masz gdzieś centralny config API, podepnij to stamtąd.
-// Na start: localhost. W produkcji ustaw np. w .env frontu.
-const API_BASE = "http://localhost:3000";
+
+const API_BASE = import.meta.env.VITE_API_URL;
+
 
 const normalizeSku = (v) => String(v || "").trim().toUpperCase();
 
@@ -29,6 +29,12 @@ const ProductUpdateSection = () => {
     const skuNormalized = normalizeSku(sku);
     if (!skuNormalized) {
       toast.warn("Wpisz SKU.");
+      return;
+    }
+
+
+    if (!API_BASE) {
+      toast.error("Brak VITE_API_URL. Ustaw w frontend/.env i na Vercel.");
       return;
     }
 
@@ -50,12 +56,11 @@ const ProductUpdateSection = () => {
           toast.warn(`Nie znaleziono SKU: ${skuNormalized} w arkuszu.`);
           return;
         }
-        toast.error(data?.message || "Błąd pobierania danych z arkusza.");
+        toast.error(data?.message || `Błąd pobierania danych z arkusza (${resp.status}).`);
         return;
       }
 
       // Mapowanie:
-      // A -> sku (API zwraca sku jako znormalizowane)
       // D -> productName
       // E -> shortDescription
       // F -> longDescription
@@ -73,67 +78,68 @@ const ProductUpdateSection = () => {
     }
   };
 
-const detectHtmlType = (html) => {
-  // normalizujemy HTML do "gołego tekstu", żeby nie przeszkadzały tagi, nbsp itd.
-  const text = (html || "")
-    .replace(/&nbsp;/gi, " ")
-    .replace(/<[^>]*>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
-    .toLowerCase();
 
-  const hasPackSize = text.includes("wielkość opakowania");
-  const hasServing = text.includes("porcja jednorazowa");
+  const detectHtmlType = (html) => {
+    // normalizujemy HTML do "gołego tekstu", żeby nie przeszkadzały tagi, nbsp itd.
+    const text = (html || "")
+      .replace(/&nbsp;/gi, " ")
+      .replace(/<[^>]*>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase();
 
-  // Jeśli wszystkie trzy są obecne => to jest "produkt/suplement"
-  if (hasPackSize && hasServing) return "product";
+    const hasPackSize = text.includes("wielkość opakowania");
+    const hasServing = text.includes("porcja jednorazowa");
 
-  // W przeciwnym razie traktuj jako kosmetyki (Twój wymóg)
-  return "cosmetics";
-};
+    // Jeśli wszystkie trzy są obecne => to jest "produkt/suplement"
+    if (hasPackSize && hasServing) return "product";
+
+    // W przeciwnym razie traktuj jako kosmetyki (Twój wymóg)
+    return "cosmetics";
+  };
 
 
 
-const handleApply = () => {
-  try {
-    const html = longDescription || "";
+  const handleApply = () => {
+    try {
+      const html = longDescription || "";
 
-    const type = detectHtmlType(html);
+      const type = detectHtmlType(html);
 
-    console.log("Detected HTML type:", type);
+      console.log("Detected HTML type:", type);
 
-    const partial =
-      type === "cosmetics"
-        ? parsePolishHtmlToCosmeticsDescriptions(html)
-        : parsePolishHtmlToProduct(html);
+      const partial =
+        type === "cosmetics"
+          ? parsePolishHtmlToCosmeticsDescriptions(html)
+          : parsePolishHtmlToProduct(html);
 
-    if (!partial || Object.keys(partial).length === 0) {
-      toast.warn("Nie wykryto danych do aktualizacji. Sprawdź strukturę HTML.");
-      return;
+      if (!partial || Object.keys(partial).length === 0) {
+        toast.warn("Nie wykryto danych do aktualizacji. Sprawdź strukturę HTML.");
+        return;
+      }
+
+      partial.productSku = normalizeSku(sku);
+      partial.productName = { pl: productName };
+
+      if (shortDescription.trim()) {
+        partial.shortDescription = { pl: shortDescription };
+      }
+
+      dispatch(updateProduct(partial));
+      toast.success(
+        `Produkt został zaktualizowany na podstawie wklejonego HTML. (tryb: ${type})`
+      );
+    } catch (e) {
+      console.error(e);
+      toast.error("Błąd podczas parsowania HTML.");
     }
+  };
 
-    partial.productSku = normalizeSku(sku);
-    partial.productName = { pl: productName };
-
-    if (shortDescription.trim()) {
-      partial.shortDescription = { pl: shortDescription };
+  React.useEffect(() => {
+    if (longDescription) {
+      handleApply();
     }
-
-    dispatch(updateProduct(partial));
-    toast.success(
-      `Produkt został zaktualizowany na podstawie wklejonego HTML. (tryb: ${type})`
-    );
-  } catch (e) {
-    console.error(e);
-    toast.error("Błąd podczas parsowania HTML.");
-  }
-};
-
-React.useEffect(() => {
-  if (longDescription) {
-    handleApply();
-  }
-}, [longDescription]);
+  }, [longDescription]);
 
 
   return (
