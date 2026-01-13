@@ -71,7 +71,6 @@ export const CosmeticsDescSplit = ({ onReset }) => {
 
     // Wyodrębnij treść każdego akapitu
     const sentences = paragraphs.map((p) => p.outerHTML);
-    console.log(sentences);
 
     if (sentences.length === 0) {
       console.error("Nie znaleziono akapitów w treści przed nagłówkiem.");
@@ -80,12 +79,10 @@ export const CosmeticsDescSplit = ({ onReset }) => {
 
     // Podział na dwie części
     const midpoint = Math.ceil(sentences.length / 2);
-    console.log(midpoint);
     const opis1Parts = sentences.slice(0, midpoint); // Pierwsza połowa
     const opis2Parts = sentences.slice(midpoint); // Druga połowa
 
     const opis1 = opis1Parts.join(" "); // Połącz akapity w string HTML
-    console.log(opis1);
     const opis2 = opis2Parts.join(" "); // Połącz akapity w string HTML
 
     if (!afterIngredients.includes(header2)) {
@@ -251,6 +248,7 @@ export const CosmeticsDescSplit = ({ onReset }) => {
               console.error("cleanedHtml jest puste lub niezdefiniowane.");
               return;
             }
+            
             splitHtmlContent(cleanedHtml);
           }}
         >

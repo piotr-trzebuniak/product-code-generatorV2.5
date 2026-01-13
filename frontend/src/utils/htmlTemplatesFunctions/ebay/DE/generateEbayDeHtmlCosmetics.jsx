@@ -5,9 +5,8 @@ export const ingredientTableHtmlToShop = (ingredientsTable) => {
   return ingredientsTable
     .map((ingredient) => {
       // Podstawowy składnik
-      let ingredientName = `<strong>${
-        ingredient.ingredient?.de || ""
-      }</strong>`;
+      let ingredientName = `<strong>${ingredient.ingredient?.de || ""
+        }</strong>`;
       let ingredientValue = ingredient.ingredientValue?.de || ""; // Sprawdzamy, czy ingredientValue ma właściwość 'pl'
       let ingredientRws = ingredient.rws ? `${ingredient.rws}` : "";
 
@@ -79,40 +78,75 @@ function extractIngredientsAndRemove(htmlString) {
   };
 }
 
+// export const generateRoleHtml = (htmlString) => {
+//   const ICON_URL = "https://elektropak.pl/ebay/role-icon.png";
+
+//   // Zidentyfikuj nagłówek
+//   const headerMatch = htmlString.match(/<h3>(?:<strong>)?(.*?)(?:<\/strong>)?<\/h3>/);
+//   const headerText = headerMatch ? headerMatch[1].trim() : "";
+
+
+//   if (!headerMatch) {
+//     return htmlString;
+//   }
+
+//   // Poprawiony regex - elastyczny co do spacji wokół myślnika
+//   const bulletpoints = [...htmlString.matchAll(/<li><strong>(.*?)<\/strong>\s*-\s*(.*?)<\/li>/g)].map(
+//     (match) => ({
+//       title: match[1].trim(),
+//       description: match[2].trim()
+//     })
+//   );
+
+//   // Generowanie HTML
+//   const headerHtml = headerText ? `<h3>${headerText}</h3>` : '';
+
+//   const listHtml = bulletpoints
+//     .map(
+//       ({ title, description }) => `
+//         <div class="role">
+//           <img src="${ICON_URL}" alt="" />
+//           <span><strong>${title}</strong> - ${description}</span>
+//         </div>`
+//     )
+//     .join("");
+
+
+//   console.log(htmlString);
+//   console.log([...htmlString.matchAll(/<li[\s\S]*?<\/li>/g)].map(m => m[0]));
+
+
+//   return headerHtml + listHtml;
+// };
+
 export const generateRoleHtml = (htmlString) => {
   const ICON_URL = "https://elektropak.pl/ebay/role-icon.png";
-  
-  // Zidentyfikuj nagłówek
-  const headerMatch = htmlString.match(/<h3><strong>(.*?)<\/strong><\/h3>/);
-  const headerText = headerMatch ? headerMatch[1] : "";
-  
-  if (!headerMatch) {
-    return htmlString;
-  }
-  
-  // Poprawiony regex - elastyczny co do spacji wokół myślnika
-  const bulletpoints = [...htmlString.matchAll(/<li><strong>(.*?)<\/strong>\s*-\s*(.*?)<\/li>/g)].map(
-    (match) => ({
-      title: match[1].trim(),
-      description: match[2].trim()
-    })
-  );
-  
-  // Generowanie HTML
-  const headerHtml = headerText ? `<h3><strong>${headerText}</strong></h3>` : '';
-    
-  const listHtml = bulletpoints
-    .map(
-      ({ title, description }) => `
-        <div class="role">
-          <img src="${ICON_URL}" alt="" />
-          <span><strong>${title}</strong> - ${description}</span>
-        </div>`
-    )
-    .join("");
-  
+
+  // Tworzymy obiekt DOM z HTML
+  const doc = new DOMParser().parseFromString(htmlString, "text/html");
+
+  // Wyszukaj nagłówek
+  const headerText = doc.querySelector("h3") ? doc.querySelector("h3").textContent.trim() : "";
+
+  // Wyszukaj listę <ul> i <li>
+  const items = Array.from(doc.querySelectorAll("ul li")).map(li => li.textContent.trim());
+
+  // Generowanie HTML dla nagłówka
+  const headerHtml = headerText ? `<h3>${headerText}</h3>` : '';
+
+  // Generowanie HTML dla listy
+  const listHtml = items.map(item => `
+    <div class="role">
+      <img src="${ICON_URL}" alt="" />
+      <span>${item}</span>
+    </div>
+  `).join("");
+
+  // Zwrócenie całości
   return headerHtml + listHtml;
 };
+
+
 
 export const generateFeatureHtml = (specialFeatures, featuresMapDE) => {
   const ICON_BASE_URL = "https://elektropak.pl/ebay/icons/";
@@ -246,47 +280,39 @@ export const generateEbayDeHtmlCosmetics = (productData) => {
               <div id="item-4" class="control-operator"></div>
               <!--  Items to Show    -->
               <figure class="item bigPic">
-                <img src="https://elektropak.pl/subiekt_kopia/foto/${
-                  productData.productSku
-                }^1.jpg" />
+                <img src="https://elektropak.pl/subiekt_kopia/foto/${productData.productSku
+    }^1.jpg" />
               </figure>
               <figure class="item bigPic">
-                <img src="https://elektropak.pl/subiekt_kopia/foto/${
-                  productData.productSku
-                }^2.jpg" />
+                <img src="https://elektropak.pl/subiekt_kopia/foto/${productData.productSku
+    }^2.jpg" />
               </figure>
               <figure class="item bigPic">
-                <img src="https://elektropak.pl/subiekt_kopia/foto/${
-                  productData.productSku
-                }^3.jpg" />
+                <img src="https://elektropak.pl/subiekt_kopia/foto/${productData.productSku
+    }^3.jpg" />
               </figure>
               <figure class="item bigPic">
-                <img src="https://elektropak.pl/subiekt_kopia/foto/${
-                  productData.productSku
-                }^4.jpg" />
+                <img src="https://elektropak.pl/subiekt_kopia/foto/${productData.productSku
+    }^4.jpg" />
               </figure>
 
               <!-- Thumbnails     -->
               <div class="controls galleryNav">
                 <a class="control-item galleryThumb" href="#item-1">
-                    <img src="https://elektropak.pl/subiekt_kopia/foto/${
-                      productData.productSku
-                    }^1.jpg" />
+                    <img src="https://elektropak.pl/subiekt_kopia/foto/${productData.productSku
+    }^1.jpg" />
                 </a>
                 <a class="control-item galleryThumb" href="#item-2">
-                    <img src="https://elektropak.pl/subiekt_kopia/foto/${
-                      productData.productSku
-                    }^2.jpg" />
+                    <img src="https://elektropak.pl/subiekt_kopia/foto/${productData.productSku
+    }^2.jpg" />
                 </a>
                 <a class="control-item galleryThumb" href="#item-3">
-                    <img src="https://elektropak.pl/subiekt_kopia/foto/${
-                      productData.productSku
-                    }^3.jpg" />
+                    <img src="https://elektropak.pl/subiekt_kopia/foto/${productData.productSku
+    }^3.jpg" />
                 </a>
                 <a class="control-item galleryThumb" href="#item-4">
-                    <img src="https://elektropak.pl/subiekt_kopia/foto/${
-                      productData.productSku
-                    }^4.jpg" />
+                    <img src="https://elektropak.pl/subiekt_kopia/foto/${productData.productSku
+    }^4.jpg" />
                 </a>
               </div>
             </div>
@@ -315,9 +341,9 @@ export const generateEbayDeHtmlCosmetics = (productData) => {
               </div>
               <div class="properties">
                 ${generateFeatureHtml(
-                  productData.specialFeatures,
-                  featuresMapDE
-                )}
+      productData.specialFeatures,
+      featuresMapDE
+    )}
               </div>
             </div>
           </div>
@@ -338,15 +364,14 @@ export const generateEbayDeHtmlCosmetics = (productData) => {
                   <div class="col-md-6">
                     <div class="left-column">
                     ${removeTrailingBracketAndDots(
-                      productData.cosmeticsDescription1.de
-                    )}
+      productData.cosmeticsDescription1.de
+    )}
                     <br>
                     ${removeTrailingBracketAndDots(
-                      productData.cosmeticsDescription2.de
-                    )}
-                     ${
-                       productData.ingredientsTable[0].ingredient.de !== ""
-                         ? `
+      productData.cosmeticsDescription2.de
+    )}
+                     ${productData.ingredientsTable[0].ingredient.de !== ""
+      ? `
             <div class="table-responsive">
               <table class="table table-hover">
               <thead class="table-lighter">
@@ -363,8 +388,8 @@ export const generateEbayDeHtmlCosmetics = (productData) => {
             </div>
             ${productData.tableEnd.de}
                       `
-                         : ""
-                     }
+      : ""
+    }
 
                      
                     </div>
@@ -372,8 +397,8 @@ export const generateEbayDeHtmlCosmetics = (productData) => {
                   <div class="col-md-6">
                     <div class="right-column">
                       ${removeTrailingBracketAndDots(
-                        editedCosmeticsDescription4.modifiedHtml
-                      )}
+      editedCosmeticsDescription4.modifiedHtml
+    )}
                     </div>
                   </div>
                 </div>
@@ -511,9 +536,8 @@ export const generateEbayDeHtmlCosmetics = (productData) => {
                 </table>
               </div>
             </div> -->
-            ${
-              editedCosmeticsDescription4.extractedText
-                ? `
+            ${editedCosmeticsDescription4.extractedText
+      ? `
             <a name="researches"></a>
             <div id="researches" class="researches section">
               <div class="researches__heading">
@@ -525,8 +549,8 @@ export const generateEbayDeHtmlCosmetics = (productData) => {
               </div>
               <p>${editedCosmeticsDescription4.extractedText}</p>
             </div>`
-                : ""
-            }
+      : ""
+    }
             <!-- <div class="propositions section">
               <div class="propositions__heading">
                 <img

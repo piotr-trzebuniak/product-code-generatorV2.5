@@ -313,6 +313,7 @@ const callSplitHtmlFromBackend = async (html) => {
     if (!response.ok) throw new Error("Błąd podczas parsowania HTML");
 
     const data = await response.json();
+    
     return data;
   } catch (error) {
     console.error("Błąd pobierania danych z /split-html:", error);
