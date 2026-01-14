@@ -1,4 +1,5 @@
 import { featuresMapEN } from "../../../featureMaps/featuresMapEN";
+import { generateRoleHtml } from "../DE/generateEbayDeHtmlCosmetics";
 
 
 export const ingredientTableHtmlToShop = (ingredientsTable) => {
@@ -99,41 +100,40 @@ function extractIngredientsAndRemove(htmlString) {
 
 
 
-
-export const generateRoleHtml = (htmlString) => {
-  const ICON_URL = "https://elektropak.pl/ebay/role-icon.png";
+// export const generateRoleHtml = (htmlString) => {
+//   const ICON_URL = "https://elektropak.pl/ebay/role-icon.png";
   
-  // Zidentyfikuj nagłówek
-  const headerMatch = htmlString.match(/<h3><strong>(.*?)<\/strong><\/h3>/);
-  const headerText = headerMatch ? headerMatch[1] : "";
+//   // Zidentyfikuj nagłówek
+//   const headerMatch = htmlString.match(/<h3><strong>(.*?)<\/strong><\/h3>/);
+//   const headerText = headerMatch ? headerMatch[1] : "";
   
-  if (!headerMatch) {
-    return htmlString;
-  }
+//   if (!headerMatch) {
+//     return htmlString;
+//   }
   
-  // Poprawiony regex - elastyczny co do spacji wokół myślnika
-  const bulletpoints = [...htmlString.matchAll(/<li><strong>(.*?)<\/strong>\s*-\s*(.*?)<\/li>/g)].map(
-    (match) => ({
-      title: match[1].trim(),
-      description: match[2].trim()
-    })
-  );
+//   // Poprawiony regex - elastyczny co do spacji wokół myślnika
+//   const bulletpoints = [...htmlString.matchAll(/<li><strong>(.*?)<\/strong>\s*-\s*(.*?)<\/li>/g)].map(
+//     (match) => ({
+//       title: match[1].trim(),
+//       description: match[2].trim()
+//     })
+//   );
   
-  // Generowanie HTML
-  const headerHtml = headerText ? `<h3><strong>${headerText}</strong></h3>` : '';
+//   // Generowanie HTML
+//   const headerHtml = headerText ? `<h3><strong>${headerText}</strong></h3>` : '';
     
-  const listHtml = bulletpoints
-    .map(
-      ({ title, description }) => `
-        <div class="role">
-          <img src="${ICON_URL}" alt="" />
-          <span><strong>${title}</strong> - ${description}</span>
-        </div>`
-    )
-    .join("");
+//   const listHtml = bulletpoints
+//     .map(
+//       ({ title, description }) => `
+//         <div class="role">
+//           <img src="${ICON_URL}" alt="" />
+//           <span><strong>${title}</strong> - ${description}</span>
+//         </div>`
+//     )
+//     .join("");
   
-  return headerHtml + listHtml;
-};
+//   return headerHtml + listHtml;
+// };
 
 export const generateFeatureHtml = (specialFeatures, featuresMapEN) => {
   const ICON_BASE_URL = "https://elektropak.pl/ebay/icons/";
