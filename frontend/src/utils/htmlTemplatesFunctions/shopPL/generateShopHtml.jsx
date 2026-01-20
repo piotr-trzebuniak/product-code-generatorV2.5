@@ -98,7 +98,7 @@ export const generateShopHtml = (productData) => {
       <div class="col-md-6">
         <div class="left-column">
           ${descriptionHTML}
-          <h3>Skład:</h3>
+          <h3>Składniki:</h3>
           <p>Wielkość opakowania: <strong>${productData.size.sizeAmount} ${
     productData.size.unit.pl
   }</strong></p>
@@ -125,19 +125,19 @@ export const generateShopHtml = (productData) => {
             </table>
           </div>
           ${productData.tableEnd.pl}
-          <h3>Składniki:</h3>
+          <h3>Składniki</h3>
           ${productData.ingredients.pl}
         </div>
       </div>
       <div class="col-md-6">
         <div class="right-column">
-          <h3>Sposób użycia:</h3>
+          <h3>Sposób użycia</h3>
           ${productData.howToUse.pl}
-          <h3>Przeciwwskazania:</h3>
+          <h3>Przeciwwskazania</h3>
           ${productData.contraindications.pl}
-          <h3>Przechowywanie:</h3>
+          <h3>Przechowywanie</h3>
           ${productData.storage.pl}
-          <h3>Informacja:</h3>
+          <h3>Informacja</h3>
           ${productData.additionalInformation.pl}
         </div>
       </div>
