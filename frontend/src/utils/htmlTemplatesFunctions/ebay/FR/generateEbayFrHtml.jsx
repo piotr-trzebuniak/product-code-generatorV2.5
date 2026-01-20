@@ -367,13 +367,6 @@ export const generateEbayFrHtml = (productData) => {
                       <p>${removeTrailingBracketAndDots(productData.storage.fr)}</p>
                       <h3>Important</h3>
                       <p>${removeTrailingBracketAndDots(productData.additionalInformation.fr)}</p>
-                      <h4>Fabricant</h4>
-                      ${productData.producer.bl}
-                      ${
-                        productData.responsibleEntity.shop
-                          ? `<h4>Organisme responsable</h4>${productData.responsibleEntity.bl}`
-                          : ""
-                      }
                     </div>
                   </div>
                 </div>

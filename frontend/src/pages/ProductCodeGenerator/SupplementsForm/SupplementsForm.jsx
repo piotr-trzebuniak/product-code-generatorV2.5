@@ -56,27 +56,28 @@ const SupplementsForm = ({ resetKey }) => {
       </div>
 
       <div className={style.supplements__grid2}>
-        <LongDescription onReset={resetKey} />
+        {/* <LongDescription onReset={resetKey} /> */}
         <Ingredients onReset={resetKey} />
         <HowToUse onReset={resetKey} />
         <Contraindications onReset={resetKey} />
         <AdditionalInformation onReset={resetKey} />
         <Storage onReset={resetKey} />
-        <div className={style.supplements__select}>
+        {/* <div className={style.supplements__select}>
           <h4>Lista producentów</h4>
           <SelectProducers />
         </div>
         <div className={style.supplements__select}>
           <h4>Lista podmiotów odpowiedzialnych</h4>
           <SelectResponsibleEntity />
-        </div>
+        </div> */}
         <div className={style.supplements__select}>
           <h4>Lista składników</h4>
           <SelectIngredient />
+           <Bulletpoints initialContent={productData.bulletpoints} />
         </div>
-        <Producer initialContent={productData.producer.bl} />
-        <ResponsibleEntity initialContent={productData.responsibleEntity.bl} />
-        <Bulletpoints initialContent={productData.bulletpoints} />
+        {/* <Producer initialContent={productData.producer.bl} />
+        <ResponsibleEntity initialContent={productData.responsibleEntity.bl} /> */}
+       
       </div>
       <div className={style.supplements__category}>
         <SelectCategory />

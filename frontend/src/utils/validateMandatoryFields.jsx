@@ -70,7 +70,6 @@ export const validateMandatoryFields = (productData, productType) => {
         'contraindications.pl': 'Przeciwwskazania',
         'storage.pl': 'Przechowywanie',
         'additionalInformation.pl': 'Dodatkowe informacje',
-        producer: 'Producent',
         'tableEnd.pl': 'Informacja końcowa tabeli'
       });
     } else if (productType === "cosmetics") {

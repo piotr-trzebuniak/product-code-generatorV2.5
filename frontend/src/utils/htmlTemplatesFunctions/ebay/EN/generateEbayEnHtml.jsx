@@ -355,14 +355,7 @@ export const generateEbayEnHtml = (productData) => {
                       <h3>Storage</h3>
                       <p>${removeTrailingBracketAndDots(productData.storage.en)}</p>
                       <h3>Important</h3>
-                      <p>${removeTrailingBracketAndDots(productData.additionalInformation.en)}</p>
-                      <h4>Manufacturer</h4>
-                      ${productData.producer.bl}
-                      ${
-                        productData.responsibleEntity.shop
-                          ? `<h4>Responsible body</h4>${productData.responsibleEntity.bl}`
-                          : ""
-                      }
+                      <p>${removeTrailingBracketAndDots(productData.additionalInformation.en)}</p>    
                     </div>
                   </div>
                 </div>

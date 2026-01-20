@@ -99,16 +99,15 @@ function generateStudiesHTML_PL(data) {
   <section class="text-item">
 <h2>Badania kliniczne dot. działania substancji:</h2>
 ${studies
-  .map(
-    (study, index) => `
+      .map(
+        (study, index) => `
 <p><b>${index + 1}. ${study.title}</b></p>
 <p><b>➡️</b> ${study.description}</p>
-<p><b>Link:</b> <a href="${study.link}" target="_blank" rel="noopener">${
-      study.link
-    }</a></p>
+<p><b>Link:</b> <a href="${study.link}" target="_blank" rel="noopener">${study.link
+          }</a></p>
 `
-  )
-  .join("")}
+      )
+      .join("")}
   </section>
   </div>
   </section>
@@ -128,7 +127,7 @@ export const generateBlHtml = (productData) => {
     ? `<section class="section"><div class="item item-12"><section class="text-item">${productData.description.pl}</section></div></section>`
     : "";
 
-  const finalHtml =  `
+  const finalHtml = `
   <section class="section">
     <div class="item item-12">
       <section class="text-item">
@@ -141,20 +140,17 @@ export const generateBlHtml = (productData) => {
   <section class="section">
     <div class="item item-6">
       <section class="image-item">
-        <img src="https://elektropak.pl/subiekt_kopia/foto/${
-          productData.productSku
-        }^1.jpg" />
+        <img src="https://elektropak.pl/subiekt_kopia/foto/${productData.productSku
+    }^1.jpg" />
       </section>
     </div>
     <div class="item item-6">
       <section class="text-item">
-        <h2>Skład</h2>
-        <p>Wielkość opakowania:<b> ${productData.size.sizeAmount} ${
-    productData.size.unit.pl
-  }</b></p>
-        <p>Porcja jednorazowa: <b>${productData.portion.portionAmount} ${
-    productData.portion.unit.pl
-  }</b></p>
+        <h2>Składniki</h2>
+        <p>Wielkość opakowania:<b> ${productData.size.sizeAmount} ${productData.size.unit.pl
+    }</b></p>
+        <p>Porcja jednorazowa: <b>${productData.portion.portionAmount} ${productData.portion.unit.pl
+    }</b></p>
         <p>Ilość porcji w opakowaniu: <b>${productData.portionQuantity}</b></p>
         <h2>Sposób użycia:</h2>
         ${productData.howToUse.pl}
@@ -164,31 +160,26 @@ export const generateBlHtml = (productData) => {
     <section class="section">
     <div class="item item-6">
       <section class="image-item">
-        <img src="https://elektropak.pl/subiekt_kopia/foto/${
-          productData.productSku
-        }^2.jpg" />
+        <img src="https://elektropak.pl/subiekt_kopia/foto/${productData.productSku
+    }^2.jpg" />
       </section>
     </div>
     <div class="item item-6">
       <section class="text-item">
-      ${
-        productData.bulletpoints.pl
-          ? `${convertListToSection(productData.bulletpoints.pl)}`
-          : ""
-      }
+      <h2>Przeciwwskazania:</h2>
+        ${productData.contraindications.pl}
+        <h2>Przechowywanie:</h2>
+        ${productData.storage.pl}
       </section>
     </div>
   </section>
 
 
-        ${researchHTML ? `${researchHTML}` : ""}
-  
   <section class="section">
     <div class="item item-12">
       <section class="text-item">
-        <p><b>Składniki ${productData.portion.portionAmount} ${
-    productData.portion.unit.pl
-  } RWS</b></p>
+        <p><b>Składniki ${productData.portion.portionAmount} ${productData.portion.unit.pl
+    } RWS</b></p>
         <p><b>_________________________________________________</b></p>
         ${ingredientsHTML}
         <p><b>_________________________________________________</b></p>
@@ -197,16 +188,7 @@ export const generateBlHtml = (productData) => {
     </div>
   </section>
 
-    <section class="section">
-    <div class="item item-12">
-      <section class="text-item">
-        <h2>Przeciwwskazania:</h2>
-        ${productData.contraindications.pl}
-        <h2>Przechowywanie:</h2>
-        ${productData.storage.pl}
-      </section>
-    </div>
-  </section>
+
   
   ${descriptionHTML}
   
@@ -214,17 +196,10 @@ export const generateBlHtml = (productData) => {
     <div class="item item-12">
       <section class="text-item">
         ${specialFeaturesHTML}
-        <h2>Składniki:</h2>
+        <h2>Składniki</h2>
         ${productData.ingredients.pl}
-        <h2>Informacja:</h2>
+        <h2>Informacja</h2>
         ${productData.additionalInformation.pl}
-        <h2>Producent:</h2>
-        ${productData.producer.bl}
-        ${
-          productData.responsibleEntity.shop
-            ? `<h2>Podmiot odpowiedzialny:</h2>${productData.responsibleEntity.bl}`
-            : ""
-        }
       </section>
     </div>
   </section>`;
