@@ -146,7 +146,7 @@ export const generateBlHtml = (productData) => {
     </div>
     <div class="item item-6">
       <section class="text-item">
-        <h2>Składniki</h2>
+        <h2>O produkcie</h2>
         <p>Wielkość opakowania:<b> ${productData.size.sizeAmount} ${productData.size.unit.pl
     }</b></p>
         <p>Porcja jednorazowa: <b>${productData.portion.portionAmount} ${productData.portion.unit.pl

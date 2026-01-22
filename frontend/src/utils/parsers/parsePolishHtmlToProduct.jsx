@@ -69,6 +69,35 @@ export function parsePolishHtmlToProduct(html) {
     return { heading: h3, nodes };
   };
 
+  const getSecondHeadingSection = (startsWith) => {
+    const h3s = qa("h3");
+    let foundHeadings = 0;
+    let targetH3 = null;
+
+    // Szukamy drugiego nagłówka h3, który pasuje do startsWith
+    for (let h3 of h3s) {
+      if (norm(getText(h3)).toLowerCase().startsWith(startsWith.toLowerCase())) {
+        foundHeadings++;
+        if (foundHeadings === 2) {
+          targetH3 = h3;
+          break;
+        }
+      }
+    }
+
+    // Jeśli drugi nagłówek h3 został znaleziony, szukamy jego sekcji
+    if (!targetH3) return null;
+
+    const nodes = [];
+    let cur = targetH3.nextElementSibling;
+    while (cur && cur.tagName !== "H3") {
+      nodes.push(cur);
+      cur = cur.nextElementSibling;
+    }
+
+    return { heading: targetH3, nodes };
+  };
+
   const htmlFromNodes = (nodes) =>
     nodes && nodes.length ? nodes.map((n) => n.outerHTML || "").join("") : "";
 
@@ -102,7 +131,7 @@ export function parsePolishHtmlToProduct(html) {
   const shortDescriptionHtml = extractShortDescHtml();
 
   // 2) Sekcja „Skład:”
-  const skladSection = getHeadingSection("Skład:");
+  const skladSection = getHeadingSection("O produkcie:");
   let sizeAmount = null;
   let sizeUnitPL = "";
   let portionAmount = null;
@@ -210,7 +239,10 @@ export function parsePolishHtmlToProduct(html) {
 
   // 3) „Składniki:”
   const skladnikiSection = getHeadingSection("Składniki:");
-  const ingredientsHtmlPL = skladnikiSection ? htmlFromNodes(skladnikiSection.nodes) : "";
+  const ingredientsHtmlPL = skladnikiSection ? htmlFromNodes(skladnikiSection.nodes) : ""
+
+  // const skladnikiSection = getSecondHeadingSection("Składniki:");
+  // const ingredientsHtmlPL = skladnikiSection ? htmlFromNodes(skladnikiSection.nodes) : "";
 
   // 4) Sposób użycia / Przeciwwskazania / Przechowywanie / Informacja
   const howToUseHtmlPL = (getHeadingSection("Sposób użycia")?.nodes)
