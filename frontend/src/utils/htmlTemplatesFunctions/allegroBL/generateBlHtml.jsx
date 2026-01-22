@@ -16,7 +16,8 @@ export const generateIngredientsHTML = (ingredientsTable) => {
     const value = removeReactFragments(
       normalize(ingredient.ingredientValue?.pl)
     );
-    const rws = removeReactFragments(normalize(ingredient.rws));
+    // const rws = removeReactFragments(normalize(ingredient.rws));
+    const rws = normalize(ingredient.rws);
 
     const name = nameText ? `<b>${nameText}</b>` : "";
 
@@ -29,7 +30,8 @@ export const generateIngredientsHTML = (ingredientsTable) => {
         const lineValue = removeReactFragments(
           normalize(line.ingredientValue?.pl)
         );
-        const lineRws = removeReactFragments(normalize(line.rws));
+        // const lineRws = removeReactFragments(normalize(line.rws));
+        const lineRws = normalize(line.rws);
 
         const lineParts = [lineName, lineValue, lineRws].filter(Boolean);
         ingredientsHTML += `<p>${lineParts.join(" ")}</p>`;
