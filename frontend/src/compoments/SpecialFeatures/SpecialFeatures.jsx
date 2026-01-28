@@ -77,7 +77,7 @@ const SpecialFeatures = () => {
             checked={specialFeatures.fillersFree}
             onChange={handleCheckboxChange}
           />
-          <span>Bez wypełniaczy</span>
+          <span>Bez konserwantów</span>
         </div>
         <div className={style.specialFeatures__checkbox}>
           <input

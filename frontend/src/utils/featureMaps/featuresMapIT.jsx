@@ -21,7 +21,7 @@ export const featuresMapIT = {
   },
   fillersFree: {
     icon: "filler.png",
-    label: "Senza additivi",
+    label: "Senza conservanti",
   },
   crueltyFree: {
     icon: "cruelty.png",

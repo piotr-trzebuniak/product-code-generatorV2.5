@@ -49,7 +49,7 @@ export const generateSpecialFeaturesList = (specialFeatures) => {
     sugarFree: "Bez cukru",
     glutenFree: "Bez glutenu",
     lactoseFree: "Bez laktozy",
-    fillersFree: "Bez wypełniaczy",
+    fillersFree: "Bez konserwantów",
     crueltyFree: "Cruelty-Free",
     hipoalergic: "Hipoalergiczny",
     ketoFriendly: "Keto-friendly",

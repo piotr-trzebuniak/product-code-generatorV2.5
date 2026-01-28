@@ -131,7 +131,11 @@ export function parsePolishHtmlToProduct(html) {
   const shortDescriptionHtml = extractShortDescHtml();
 
   // 2) Sekcja „Skład:”
-  const skladSection = getHeadingSection("O produkcie:");
+  let skladSection = getHeadingSection("O produkcie:");
+
+  if (!skladSection) {
+    skladSection = getHeadingSection("Skład:");
+  }
   let sizeAmount = null;
   let sizeUnitPL = "";
   let portionAmount = null;
@@ -176,65 +180,133 @@ export function parsePolishHtmlToProduct(html) {
       portionQty = isNaN(parsed) ? 0 : parsed;
     }
 
+    // // Tabela składników z obsługą linii dodatkowych (br)
+    // const tableHost = skladSection.nodes.find((n) => q("table", n));
+    // const table = q("table", tableHost || dom);
+    // if (table) {
+    //   const rows = qa("tbody tr", table);
+    //   ingredientsTable = rows.map((tr, idx) => {
+    //     const tds = qa("td", tr);
+    //     const nameHtml = tds[0]?.innerHTML || "";
+    //     const valueHtml = tds[1]?.innerHTML || "";
+    //     const rwsHtml = tds[2]?.innerHTML || "";
+
+    //     // Podział na linie po <br>
+    //     const nameLines = splitByBr(nameHtml).map((s) => norm(stripStrongB(s)));
+    //     const valueLines = splitByBr(valueHtml);
+
+    //     // UŻYJEMY specjalnej funkcji dla RWS, żeby nie tracić "<>"
+    //     const rwsLines = splitByBrPreserveAngle(rwsHtml);
+
+    //     // Linia główna
+    //     const mainName = decodeEntities(nameLines[0] || "");
+    //     const mainVal = decodeEntities(valueLines[0] || "");
+    //     const rawRws = decodeEntities(rwsLines[0] || "");
+
+    //     const normalizeRws = (s) => {
+    //       const t = norm(s);
+    //       if (!t) return "";
+    //       // zamień różne warianty znaczenia "brak RWS" na "<>"
+    //       if (t === "<>" || /<\s*>/.test(t) || /&lt;\s*&gt;/.test(s) || t === "&lt;&gt;" || t === "&lt; &gt;") return "<>";
+    //       return t;
+    //     };
+
+    //     const main = {
+    //       ingredientIndex: idx + 1,
+    //       ingredient: { pl: mainName },
+    //       ingredientValue: { pl: mainVal },
+    //       rws: normalizeRws(rawRws),
+    //       additionalLines: [],
+    //     };
+
+    //     // Linie dodatkowe (jeśli są)
+    //     if (nameLines.length > 1 || valueLines.length > 1 || rwsLines.length > 1) {
+    //       const maxLen = Math.max(nameLines.length, valueLines.length, rwsLines.length);
+    //       for (let i = 1; i < maxLen; i++) {
+    //         const subName = decodeEntities(nameLines[i] || "");
+    //         const subVal = decodeEntities(valueLines[i] || "");
+    //         const subRws = normalizeRws(rwsLines[i] || "");
+    //         if (!subName && !subVal && !subRws) continue;
+    //         main.additionalLines.push({
+    //           lineIndex: i,
+    //           ingredient: { pl: subName },
+    //           ingredientValue: { pl: subVal },
+    //           rws: subRws,
+    //         });
+    //       }
+    //     }
+
+    //     return main;
+    //   });
+    // }
+
     // Tabela składników z obsługą linii dodatkowych (br)
     const tableHost = skladSection.nodes.find((n) => q("table", n));
     const table = q("table", tableHost || dom);
     if (table) {
       const rows = qa("tbody tr", table);
-      ingredientsTable = rows.map((tr, idx) => {
-        const tds = qa("td", tr);
-        const nameHtml = tds[0]?.innerHTML || "";
-        const valueHtml = tds[1]?.innerHTML || "";
-        const rwsHtml = tds[2]?.innerHTML || "";
+      ingredientsTable = rows
+        .map((tr, idx) => {
+          const tds = qa("td", tr);
+          const nameHtml = tds[0]?.innerHTML || "";
+          const valueHtml = tds[1]?.innerHTML || "";
+          const rwsHtml = tds[2]?.innerHTML || "";
 
-        // Podział na linie po <br>
-        const nameLines = splitByBr(nameHtml).map((s) => norm(stripStrongB(s)));
-        const valueLines = splitByBr(valueHtml);
+          // Podział na linie po <br>
+          const nameLines = splitByBr(nameHtml).map((s) => norm(stripStrongB(s)));
+          const valueLines = splitByBr(valueHtml);
 
-        // UŻYJEMY specjalnej funkcji dla RWS, żeby nie tracić "<>"
-        const rwsLines = splitByBrPreserveAngle(rwsHtml);
+          // UŻYJEMY specjalnej funkcji dla RWS, żeby nie tracić "<>"
+          const rwsLines = splitByBrPreserveAngle(rwsHtml);
 
-        // Linia główna
-        const mainName = decodeEntities(nameLines[0] || "");
-        const mainVal = decodeEntities(valueLines[0] || "");
-        const rawRws = decodeEntities(rwsLines[0] || "");
+          // Linia główna
+          const mainName = decodeEntities(nameLines[0] || "");
+          const mainVal = decodeEntities(valueLines[0] || "");
+          const rawRws = decodeEntities(rwsLines[0] || "");
 
-        const normalizeRws = (s) => {
-          const t = norm(s);
-          if (!t) return "";
-          // zamień różne warianty znaczenia "brak RWS" na "<>"
-          if (t === "<>" || /<\s*>/.test(t) || /&lt;\s*&gt;/.test(s) || t === "&lt;&gt;" || t === "&lt; &gt;") return "<>";
-          return t;
-        };
-
-        const main = {
-          ingredientIndex: idx + 1,
-          ingredient: { pl: mainName },
-          ingredientValue: { pl: mainVal },
-          rws: normalizeRws(rawRws),
-          additionalLines: [],
-        };
-
-        // Linie dodatkowe (jeśli są)
-        if (nameLines.length > 1 || valueLines.length > 1 || rwsLines.length > 1) {
-          const maxLen = Math.max(nameLines.length, valueLines.length, rwsLines.length);
-          for (let i = 1; i < maxLen; i++) {
-            const subName = decodeEntities(nameLines[i] || "");
-            const subVal = decodeEntities(valueLines[i] || "");
-            const subRws = normalizeRws(rwsLines[i] || "");
-            if (!subName && !subVal && !subRws) continue;
-            main.additionalLines.push({
-              lineIndex: i,
-              ingredient: { pl: subName },
-              ingredientValue: { pl: subVal },
-              rws: subRws,
-            });
+          // 👉 pomijamy wiersz, jeśli to nagłówek "Składniki"
+          if (idx === 0 && norm(mainName).toLowerCase() === "składniki") {
+            return null;
           }
-        }
 
-        return main;
-      });
+          const normalizeRws = (s) => {
+            const t = norm(s);
+            if (!t) return "";
+            // zamień różne warianty znaczenia "brak RWS" na "<>"
+            if (t === "<>" || /<\s*>/.test(t) || /&lt;\s*&gt;/.test(s) || t === "&lt;&gt;" || t === "&lt; &gt;") return "<>";
+            return t;
+          };
+
+          const main = {
+            ingredientIndex: idx + 1,
+            ingredient: { pl: mainName },
+            ingredientValue: { pl: mainVal },
+            rws: normalizeRws(rawRws),
+            additionalLines: [],
+          };
+
+          // Linie dodatkowe (jeśli są)
+          if (nameLines.length > 1 || valueLines.length > 1 || rwsLines.length > 1) {
+            const maxLen = Math.max(nameLines.length, valueLines.length, rwsLines.length);
+            for (let i = 1; i < maxLen; i++) {
+              const subName = decodeEntities(nameLines[i] || "");
+              const subVal = decodeEntities(valueLines[i] || "");
+              const subRws = normalizeRws(rwsLines[i] || "");
+              if (!subName && !subVal && !subRws) continue;
+              main.additionalLines.push({
+                lineIndex: i,
+                ingredient: { pl: subName },
+                ingredientValue: { pl: subVal },
+                rws: subRws,
+              });
+            }
+          }
+
+          return main;
+        })
+        .filter(Boolean); // usuwa null (czyli linię "Składniki")
     }
+
   }
 
   // 3) „Składniki:”
