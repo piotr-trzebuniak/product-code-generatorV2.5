@@ -98,7 +98,7 @@ export const generateShopHtml = (productData) => {
       <div class="col-md-6">
         <div class="left-column">
           ${descriptionHTML}
-          <h3>O produkcie:</h3>
+          <h3>O produkcie</h3>
           <p>Wielkość opakowania: <strong>${productData.size.sizeAmount} ${
     productData.size.unit.pl
   }</strong></p>
