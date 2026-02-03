@@ -46,7 +46,7 @@ export const generateSpecialFeaturesList = (specialFeatures) => {
   const featureNames = {
     gmoFree: "Bez GMO",
     soyaFree: "Bez soi",
-    sugarFree: "Bez cukru",
+    sugarFree: "Bez dodatku cukru",
     glutenFree: "Bez glutenu",
     lactoseFree: "Bez laktozy",
     fillersFree: "Bez konserwantów",
