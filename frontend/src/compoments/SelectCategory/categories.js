@@ -479,5 +479,15 @@ export const categories = [
     index: 96,
     value: 1728999,
     label: "Dla Dzieci / Pielęgnacja / Pielęgnacja włosów",
+  },
+  {
+    index: 97,
+    value: 1728999,
+    label: "Delikatesy / Kawa, herbata i kakao / Herbata",
+  },
+  {
+    index: 98,
+    value: 1728999,
+    label: "Delikatesy / Kawa, herbata i kakao / Kawa",
   }
 ];
