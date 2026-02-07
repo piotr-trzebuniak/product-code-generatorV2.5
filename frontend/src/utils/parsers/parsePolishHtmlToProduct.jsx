@@ -14,45 +14,42 @@ export function parsePolishHtmlToProduct(html) {
       .replace(/&gt;/g, ">")
       .replace(/&nbsp;/g, " ");
 
-  const splitByBr = (html) => {
+  const splitByBr = (html, { keepEmpty = false } = {}) => {
     if (!html) return [];
-    // zamień różne warianty <br> na \n i rozbij
+
     const unified = html
       .replace(/<br\s*\/?>/gi, "\n")
-      .replace(/<\/p>\s*<p>/gi, "\n"); // zabezpieczenie gdy linie są w <p>
-    return unified
-      .split("\n")
-      .map((x) => norm(stripTags(x)))
-      .filter((x) => x.length);
+      .replace(/<\/p>\s*<p>/gi, "\n");
+
+    const parts = unified.split("\n").map((x) => norm(stripTags(x)));
+
+    return keepEmpty ? parts : parts.filter((x) => x.length);
   };
+
 
   // --- NOWA funkcja: splitByBrPreserveAngle ---
   // Używamy jej tylko dla komórki RWS, żeby NIE usuwać literalnego "<>"
-  const splitByBrPreserveAngle = (html) => {
+  const splitByBrPreserveAngle = (html, { keepEmpty = false } = {}) => {
     if (!html) return [];
-    // zamień <br> i </p><p> na \n
+
     let unified = html
       .replace(/<br\s*\/?>/gi, "\n")
       .replace(/<\/p>\s*<p>/gi, "\n");
 
-    // dekoduj encje (&lt; &gt; &nbsp;)
     unified = decodeEntities(unified);
 
-    // zabezpiecz literalne "<>" przed usunięciem przez regex usuwający tagi
     const PLACEHOLDER = "___ANGLE_BRACKETS___";
-    unified = unified.replace(/<>/g, PLACEHOLDER);
+    // ważne: łap też "< >" ze spacją
+    unified = unified.replace(/<\s*>/g, PLACEHOLDER);
 
-    // usuń pozostałe tagi
     unified = unified.replace(/<[^>]*>/g, "");
 
-    // przywróć placeholder do "<>"
     unified = unified.replace(new RegExp(PLACEHOLDER, "g"), "<>");
 
-    return unified
-      .split("\n")
-      .map((x) => norm(x))
-      .filter((x) => x.length);
+    const parts = unified.split("\n").map((x) => norm(x));
+    return keepEmpty ? parts : parts.filter((x) => x.length);
   };
+
   // --- koniec nowej funkcji ---
 
   const getHeadingSection = (startsWith) => {
@@ -131,11 +128,44 @@ export function parsePolishHtmlToProduct(html) {
   const shortDescriptionHtml = extractShortDescHtml();
 
   // 2) Sekcja „Skład:”
-  let skladSection = getHeadingSection("O produkcie:");
+  let descriptionHtmlPL = "";
+  const possibleHeadings = ["O produkcie:", "O produkcie", "Skład:", "Skład"];
 
-  if (!skladSection) {
-    skladSection = getHeadingSection("Skład:");
+
+  let skladSection = null;
+
+  for (const heading of possibleHeadings) {
+    skladSection = getHeadingSection(heading);
+    if (skladSection) break;
   }
+
+
+  // LONG DESCRIPTION – treść pomiędzy nagłówkiem "O produkcie" a danymi technicznymi
+  const longDescNodes = [];
+
+  if (skladSection?.nodes?.length) {
+    for (const n of skladSection.nodes) {
+      const text = n.textContent || "";
+
+      // stop gdy trafimy na dane techniczne lub tabelę
+      if (
+        /Wielkość opakowania/i.test(text) ||
+        /Porcja jednorazowa/i.test(text) ||
+        /Ilość porcji/i.test(text) ||
+        n.querySelector?.("table")
+      ) {
+        break;
+      }
+
+      longDescNodes.push(n);
+    }
+
+    if (longDescNodes.length) {
+      descriptionHtmlPL = htmlFromNodes(longDescNodes);
+    }
+  }
+
+
   let sizeAmount = null;
   let sizeUnitPL = "";
   let portionAmount = null;
@@ -180,66 +210,6 @@ export function parsePolishHtmlToProduct(html) {
       portionQty = isNaN(parsed) ? 0 : parsed;
     }
 
-    // // Tabela składników z obsługą linii dodatkowych (br)
-    // const tableHost = skladSection.nodes.find((n) => q("table", n));
-    // const table = q("table", tableHost || dom);
-    // if (table) {
-    //   const rows = qa("tbody tr", table);
-    //   ingredientsTable = rows.map((tr, idx) => {
-    //     const tds = qa("td", tr);
-    //     const nameHtml = tds[0]?.innerHTML || "";
-    //     const valueHtml = tds[1]?.innerHTML || "";
-    //     const rwsHtml = tds[2]?.innerHTML || "";
-
-    //     // Podział na linie po <br>
-    //     const nameLines = splitByBr(nameHtml).map((s) => norm(stripStrongB(s)));
-    //     const valueLines = splitByBr(valueHtml);
-
-    //     // UŻYJEMY specjalnej funkcji dla RWS, żeby nie tracić "<>"
-    //     const rwsLines = splitByBrPreserveAngle(rwsHtml);
-
-    //     // Linia główna
-    //     const mainName = decodeEntities(nameLines[0] || "");
-    //     const mainVal = decodeEntities(valueLines[0] || "");
-    //     const rawRws = decodeEntities(rwsLines[0] || "");
-
-    //     const normalizeRws = (s) => {
-    //       const t = norm(s);
-    //       if (!t) return "";
-    //       // zamień różne warianty znaczenia "brak RWS" na "<>"
-    //       if (t === "<>" || /<\s*>/.test(t) || /&lt;\s*&gt;/.test(s) || t === "&lt;&gt;" || t === "&lt; &gt;") return "<>";
-    //       return t;
-    //     };
-
-    //     const main = {
-    //       ingredientIndex: idx + 1,
-    //       ingredient: { pl: mainName },
-    //       ingredientValue: { pl: mainVal },
-    //       rws: normalizeRws(rawRws),
-    //       additionalLines: [],
-    //     };
-
-    //     // Linie dodatkowe (jeśli są)
-    //     if (nameLines.length > 1 || valueLines.length > 1 || rwsLines.length > 1) {
-    //       const maxLen = Math.max(nameLines.length, valueLines.length, rwsLines.length);
-    //       for (let i = 1; i < maxLen; i++) {
-    //         const subName = decodeEntities(nameLines[i] || "");
-    //         const subVal = decodeEntities(valueLines[i] || "");
-    //         const subRws = normalizeRws(rwsLines[i] || "");
-    //         if (!subName && !subVal && !subRws) continue;
-    //         main.additionalLines.push({
-    //           lineIndex: i,
-    //           ingredient: { pl: subName },
-    //           ingredientValue: { pl: subVal },
-    //           rws: subRws,
-    //         });
-    //       }
-    //     }
-
-    //     return main;
-    //   });
-    // }
-
     // Tabela składników z obsługą linii dodatkowych (br)
     const tableHost = skladSection.nodes.find((n) => q("table", n));
     const table = q("table", tableHost || dom);
@@ -254,10 +224,10 @@ export function parsePolishHtmlToProduct(html) {
 
           // Podział na linie po <br>
           const nameLines = splitByBr(nameHtml).map((s) => norm(stripStrongB(s)));
-          const valueLines = splitByBr(valueHtml);
+          const valueLines = splitByBr(valueHtml, { keepEmpty: true });
 
           // UŻYJEMY specjalnej funkcji dla RWS, żeby nie tracić "<>"
-          const rwsLines = splitByBrPreserveAngle(rwsHtml);
+          const rwsLines = splitByBrPreserveAngle(rwsHtml, { keepEmpty: true });
 
           // Linia główna
           const mainName = decodeEntities(nameLines[0] || "");
@@ -310,11 +280,16 @@ export function parsePolishHtmlToProduct(html) {
   }
 
   // 3) „Składniki:”
-  const skladnikiSection = getHeadingSection("Składniki:");
+  const skladnikiHeadings = ["Składniki:", "Składniki"];
+
+  let skladnikiSection = null;
+
+  for (const heading of skladnikiHeadings) {
+    skladnikiSection = getHeadingSection(heading);
+    if (skladnikiSection) break;
+  }
   const ingredientsHtmlPL = skladnikiSection ? htmlFromNodes(skladnikiSection.nodes) : ""
 
-  // const skladnikiSection = getSecondHeadingSection("Składniki:");
-  // const ingredientsHtmlPL = skladnikiSection ? htmlFromNodes(skladnikiSection.nodes) : "";
 
   // 4) Sposób użycia / Przeciwwskazania / Przechowywanie / Informacja
   const howToUseHtmlPL = (getHeadingSection("Sposób użycia")?.nodes)
@@ -357,7 +332,8 @@ export function parsePolishHtmlToProduct(html) {
     if (portionUnitPL) partial.portion.unit = { pl: portionUnitPL };
   }
 
-  if (portionQty) partial.portionQuantity = portionQty;
+  if (portionQty !== null && portionQty !== undefined) partial.portionQuantity = portionQty;
+
 
   // tabela składników
   if (ingredientsTable.length) partial.ingredientsTable = ingredientsTable;
@@ -370,6 +346,9 @@ export function parsePolishHtmlToProduct(html) {
   if (contraindicationsHtmlPL) partial.contraindications = { pl: contraindicationsHtmlPL };
   if (storageHtmlPL) partial.storage = { pl: storageHtmlPL };
   if (infoHtmlPL) partial.additionalInformation = { pl: infoHtmlPL };
+  if (descriptionHtmlPL) {
+    partial.description = { pl: descriptionHtmlPL };
+  }
 
   return partial;
 }

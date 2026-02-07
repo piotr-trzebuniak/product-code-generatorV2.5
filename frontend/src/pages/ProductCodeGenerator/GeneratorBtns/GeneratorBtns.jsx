@@ -16,6 +16,7 @@ const GeneratorBtns = ({
   copyHtmlToEbayEn,
   copyHtmlToEbayFr,
   copyHtmlToEbayIt,
+  copyHtmlToEmagRo,
   htmlToShop,
   htmlToBl,
   style,
@@ -189,6 +190,12 @@ const GeneratorBtns = ({
                 className={style.generator__copyBtn}
               >
                 Kod HTML dla EBAY IT
+              </Button>
+              <Button
+                onClick={copyHtmlToEmagRo}
+                className={style.generator__copyBtn}
+              >
+                Kod HTML dla EMAG RO
               </Button>
             </>
           )}

@@ -271,6 +271,19 @@ const ProductCodeGenerator = () => {
       toast.error("Brak kodu HTML do skopiowania.");
     }
   };
+  const copyHtmlToEmagRo = async () => {
+    if (htmlToEmagRo) {
+      try {
+        await navigator.clipboard.writeText(htmlToEmagRo);
+        console.log("Kod HTML dla EMAG RO skopiowany do schowka.");
+        toast.success("Kod HTML dla EMAG RO skopiowany do schowka.");
+      } catch (err) {
+        console.error("Nie udało się skopiować kodu HTML dla EMAG RO:", err);
+      }
+    } else {
+      toast.error("Brak kodu HTML do skopiowania.");
+    }
+  };
 
   const resetForm = () => {
     dispatch(resetProduct());
@@ -753,6 +766,7 @@ const sendToGoogleSheetsOnlyEbay = async () => {
                 copyHtmlToEbayEn={copyHtmlToEbayEn}
                 copyHtmlToEbayFr={copyHtmlToEbayFr}
                 copyHtmlToEbayIt={copyHtmlToEbayIt}
+                copyHtmlToEmagRo={copyHtmlToEmagRo}
                 copyHtmlToShopAndShortDesc={copyHtmlToShopAndShortDesc}
                 htmlToShop={htmlToShop}
                 htmlToBl={htmlToBl}

@@ -1,51 +1,64 @@
-import { removeTrailingBracketAndDots } from "../../ebay/EN/generateEbayEnHtmlCosmetics";
+export const generateSpecialFeaturesList = (specialFeatures) => {
+  const featureNames = {
+    gmoFree: "Fără GMO",
+    soyaFree: "Fără soia",
+    sugarFree: "Fără adaos de zahăr",
+    glutenFree: "Fără gluten",
+    lactoseFree: "Fără lactoză",
+    fillersFree: "Fără conservanți",
+    crueltyFree: "Cruelty-free",
+    hipoalergic: "Hipoalergenic",
+    ketoFriendly: "Keto-friendly",
+    lowCarb: "Conținut scăzut de carbohidrați",
+    slowRelease: "Eliberare lentă",
+    fastRelease: "Eliberare rapidă",
+    filmCoatedTablet: "Comprimat filmat",
+    wegan: "Vegan",
+    wegetarian: "Vegetarian",
+    zeroWaste: "Zero deșeuri",
+  };
 
+
+  const list = Object.keys(specialFeatures)
+    .filter((key) => specialFeatures[key]) // wybiera tylko włączone cechy
+    .map((key) => `<p>⭐ ${featureNames[key]}</p>`)
+    .join(""); // skleja <li>...</li> w jeden ciąg
+
+  return list ? `<h2>Caracteristici speciale</h2>${list}` : "";
+};
 
 export const generateIngredientsHTML = (ingredientsTable) => {
   let ingredientsHTML = "";
 
+  const normalize = (v) => (v ?? "").toString().trim();
+  const removeReactFragments = (s) =>
+    /^(?:<>|<\/>|<>\s*<\/>)$/.test(s) ? "" : s;
+
   ingredientsTable.forEach((ingredient) => {
-    // główny składnik
-    const name = ingredient.ingredient?.ro || "";
-    const value = ingredient.ingredientValue?.ro || "";
-    const rws = ingredient.rws === "<>" ? "*" : ingredient.rws || "";
+    const nameText = normalize(ingredient.ingredient?.ro);
+    const value = removeReactFragments(
+      normalize(ingredient.ingredientValue?.ro)
+    );
+    // const rws = removeReactFragments(normalize(ingredient.rws));
+    const rws = normalize(ingredient.rws);
 
-    // sprawdź czy są dodatkowe linie
-    if (ingredient.additionalLines && ingredient.additionalLines.length > 0) {
-      // składnik z dodatkowymi liniami
-      let combinedNames = `<strong>${name} <br></strong>`;
-      let combinedValues = `${value}`;
+    const name = nameText ? `<b>${nameText}</b>` : "";
 
-      // dodaj dodatkowe linie
-      ingredient.additionalLines.forEach((line, index) => {
-        const lineName = line.ingredient?.ro || "";
-        const lineValue = line.ingredientValue?.ro || "";
+    const parts = [name, value, rws].filter(Boolean);
+    ingredientsHTML += `<p>${parts.join(" ")}</p>`;
 
-        // dla pierwszej dodatkowej linii nie dodawaj <br> przed nazwą
-        if (index === 0) {
-          combinedNames += lineName;
-        } else {
-          combinedNames += `<br>${lineName}`;
-        }
-        combinedValues += `<br>${lineValue}`;
+    if (ingredient.additionalLines?.length) {
+      ingredient.additionalLines.forEach((line) => {
+        const lineName = removeReactFragments(normalize(line.ingredient?.ro));
+        const lineValue = removeReactFragments(
+          normalize(line.ingredientValue?.ro)
+        );
+        // const lineRws = removeReactFragments(normalize(line.rws));
+        const lineRws = normalize(line.rws);
+
+        const lineParts = [lineName, lineValue, lineRws].filter(Boolean);
+        ingredientsHTML += `<p>${lineParts.join(" ")}</p>`;
       });
-
-      ingredientsHTML += `
-      <tr>
-         <td>
-            ${combinedNames}
-         </td>
-         <td>${combinedValues}</td>
-         <td>${rws}</td>
-      </tr>`;
-    } else {
-      // pojedynczy składnik bez dodatkowych linii
-      ingredientsHTML += `
-      <tr>
-         <td><strong>${name}</strong></td>
-         <td>${value}</td>
-         <td>${rws}</td>
-      </tr>`;
     }
   });
 
@@ -54,31 +67,70 @@ export const generateIngredientsHTML = (ingredientsTable) => {
 
 export const generateEmagRo = (productData) => {
   const ingredientsHTML = generateIngredientsHTML(productData.ingredientsTable);
-  return `${removeTrailingBracketAndDots(productData.shortDescription.ro)}
-<h3>Informații suplimentare:</h3>
-<p>Dimensiunea pachetului: <strong>${productData.size.sizeAmount} ${
-    productData.size.unit.ro
-  }</strong></p>
-<p>Porție: <strong>${productData.portion.portionAmount} ${
-    productData.portion.unit.ro
-  }</strong></p>
-<p>Porții pe recipient: <strong>${productData.portionQuantity}</strong></p>
-<table class="table">
-   <tbody>
-      <tr class="tablehead">
-         <td><strong>Informații suplimentare</strong></td>
-         <td><strong>Cantitate per porție</strong></td>
-         <td><strong>% Valoare zilnică</strong></td>
-      </tr>
-  ${ingredientsHTML}
-   </tbody>
+  const specialFeaturesHTML = generateSpecialFeaturesList(
+    productData.specialFeatures
+  );
+  return `
+  <div class="product-page-description description-banner-right" style="width:100%;max-width:100%;">
+<div class="product-page-description-text" style="width:100%;max-width:100%;">
+<div class="collapse-offset in" style="width:100%;max-width:100%;">
+<table border="0" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;border-spacing:0;table-layout:fixed;max-width:100%;">
+	<tbody>
+		<tr>
+			<td colspan="2" style="padding:12px 12px 0 12px;vertical-align:top;">
+			<h1 style="margin:0 0 10px 0;">${productData.productName.ro}</h1>
+
+			${productData.shortDescription.ro}
+			</td>
+		</tr>
+		<tr>
+			<td style="width:50%;padding:12px;vertical-align:middle;"><img alt="${productData.productName.ro}" src="https://elektropak.pl/subiekt_kopia/foto/${productData.productSku
+    }^1.jpg" style="display:block;line-height:0;border:0px;text-decoration:none;height:600px;width:600px;" /></td>
+			<td style="width:50%;padding:12px;vertical-align:middle;">
+			<h2 style="margin:14px 0 8px 0;">Informatii de baza</h2>
+			<p style="margin:0 0 6px 0;">Dimensiunea ambalajului: <strong>${productData.size.sizeAmount} ${productData.size.unit.ro
+    }</strong></p>
+			<p style="margin:0 0 6px 0;">Portie unica: <strong>${productData.portion.portionAmount} ${productData.portion.unit.ro
+    }</strong></p>
+			<p style="margin:0;">Numar portii per ambalaj: <strong>${productData.portionQuantity}</strong></p>
+
+			<h2 style="margin:14px 0 0 0;">Mod de utilizare</h2>
+			${productData.howToUse.ro}
+			</td>
+		</tr>
+		<tr>
+			<td style="width:50%;padding:12px;vertical-align:middle;"><img alt="${productData.productName.ro}" src="https://elektropak.pl/subiekt_kopia/foto/${productData.productSku
+    }^2.jpg" style="display:block;line-height:0;border:0px;text-decoration:none;height:600px;width:600px;" /></td>
+			<td style="width:50%;padding:12px;vertical-align:middle;">
+			<h2 style="margin:0 0 8px 0;">Contraindicații</h2>
+			${productData.contraindications.ro}
+			<h2 style="margin:0 0 8px 0;">Depozitare</h2>
+			${productData.storage.ro}
+			</td>
+		</tr>
+		<tr>
+			<p> </p>
+      <table class="table" style="margin-top: 10px">
+       <p><b>Składniki ${productData.portion.portionAmount} ${productData.portion.unit.ro
+    } RWS</b></p>
+        <p><b>_________________________________________________</b></p>
+        ${ingredientsHTML}
+        <p><b>_________________________________________________</b></p>
+        ${productData.tableEnd.ro}
+    </table>
+
+	${specialFeaturesHTML}
+  <h2 style="margin:0 0 8px 0;">Ingrediente</h2>
+  ${productData.ingredients.ro}
+  <h2 style="margin:15px 0 8px 0;">Informații suplimentare</h2>
+  ${productData.additionalInformation.ro}
+			</td>
+		</tr>
+	</tbody>
 </table>
-<p>* Valoarea zilnică nu a fost stabilită.</p>
-<h3>Alte ingrediente:</h3>
-${removeTrailingBracketAndDots(productData.ingredients.ro)}
-<h3>Utilizare recomandată:</h3>
-${removeTrailingBracketAndDots(productData.howToUse.ro)}
-<h3>Atenție:</h3>
-${removeTrailingBracketAndDots(productData.additionalInformation.ro)}
-     `;
+</div>
+</div>
+</div>
+
+`;
 };
