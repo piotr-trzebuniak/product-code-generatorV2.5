@@ -111,7 +111,7 @@ export const generateEmagRo = (productData) => {
 		<tr>
 			<p> </p>
       <table class="table" style="margin-top: 10px">
-       <p><b>Składniki ${productData.portion.portionAmount} ${productData.portion.unit.ro
+       <p><b>Ingrediente ${productData.portion.portionAmount} ${productData.portion.unit.ro
     } RWS</b></p>
         <p><b>_________________________________________________</b></p>
         ${ingredientsHTML}

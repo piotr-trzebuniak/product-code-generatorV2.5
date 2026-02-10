@@ -1,60 +1,20 @@
-import { removeTrailingBracketAndDots } from "../../ebay/EN/generateEbayEnHtmlCosmetics";
+import { generateIngredientsHTML } from "./generateEmagRo";
 
-export const generateIngredientsHTML = (ingredientsTable) => {
-  let ingredientsHTML = "";
-
-  ingredientsTable.forEach((ingredient) => {
-    // główny składnik
-    const name = ingredient.ingredient?.ro || "";
-    const value = ingredient.ingredientValue?.ro || "";
-    const rws = ingredient.rws === "<>" ? "*" : ingredient.rws || "";
-
-    // sprawdź czy są dodatkowe linie
-    if (ingredient.additionalLines && ingredient.additionalLines.length > 0) {
-      // składnik z dodatkowymi liniami
-      let combinedNames = `<strong>${name} <br></strong>`;
-      let combinedValues = `${value}`;
-
-      // dodaj dodatkowe linie
-      ingredient.additionalLines.forEach((line, index) => {
-        const lineName = line.ingredient?.ro || "";
-        const lineValue = line.ingredientValue?.ro || "";
-
-        // dla pierwszej dodatkowej linii nie dodawaj <br> przed nazwą
-        if (index === 0) {
-          combinedNames += lineName;
-        } else {
-          combinedNames += `<br>${lineName}`;
-        }
-        combinedValues += `<br>${lineValue}`;
-      });
-
-      ingredientsHTML += `
-      <tr>
-         <td>
-            ${combinedNames}
-         </td>
-         <td>${combinedValues}</td>
-         <td>${rws}</td>
-      </tr>`;
-    } else {
-      // pojedynczy składnik bez dodatkowych linii
-      ingredientsHTML += `
-      <tr>
-         <td><strong>${name}</strong></td>
-         <td>${value}</td>
-         <td>${rws}</td>
-      </tr>`;
-    }
-  });
-
-  return ingredientsHTML;
-};
+;
 
 export const generateEmagRoCosmetics = (productData) => {
 
 
   const ingredientsHTML = generateIngredientsHTML(productData.ingredientsTable);
+
+  function replaceH3WithH2(html) {
+  if (!html || typeof html !== "string") return html;
+
+  return html
+    .replace(/<h3([^>]*)>/gi, "<h2$1>")
+    .replace(/<\/h3>/gi, "</h2>");
+}
+
 
 
   function transformListHTML(inputHtml) {
@@ -88,29 +48,11 @@ export const generateEmagRoCosmetics = (productData) => {
 
   const transformedListHTML = transformListHTML(productData.cosmeticsDescription3.ro)
 
-  //   return `${removeTrailingBracketAndDots(productData.shortDescription.ro)}
-  //     ${removeTrailingBracketAndDots(productData.cosmeticsDescription1.ro)}
-  //     ${removeTrailingBracketAndDots(productData.cosmeticsDescription2.ro)}
-  //     ${
-  //     productData.ingredientsTable[0].ingredient.pl !== ""
-  //       ? `
-  // <table class="table">
-  //    <tbody>
-  //       <tr class="tablehead">
-  //          <td><strong>Informații suplimentare</strong></td>
-  //          <td><strong>Cantitate per porție</strong></td>
-  //          <td><strong>% Valoare zilnică</strong></td>
-  //       </tr>
-  //   ${ingredientsHTML}
-  //    </tbody>
-  // </table>
-  // <p>* Valoarea zilnică nu a fost stabilită.</p>
-  //   `
-  //       : ""
-  //   }
-  //   ${removeTrailingBracketAndDots(productData.cosmeticsDescription3.ro)}
-  //   ${removeTrailingBracketAndDots(productData.cosmeticsDescription4.ro)}
-  //      `;
+  const cosmeticsDescription1 = replaceH3WithH2(productData.cosmeticsDescription1.ro);
+const cosmeticsDescription2 = replaceH3WithH2(productData.cosmeticsDescription2.ro);
+const cosmeticsDescription4 = replaceH3WithH2(productData.cosmeticsDescription4.ro);
+
+
   return `
 <div class="product-page-description description-banner-right" style="width:100%;max-width:100%;">
   <div class="product-page-description-text" style="width:100%;max-width:100%;">
@@ -133,7 +75,7 @@ export const generateEmagRoCosmetics = (productData) => {
               />
             </td>
             <td style="width:50%;padding:12px;vertical-align:middle;">
-              ${productData.cosmeticsDescription1.ro}
+              ${cosmeticsDescription1}
             </td>
           </tr>
 
@@ -146,28 +88,25 @@ export const generateEmagRoCosmetics = (productData) => {
               />
             </td>
             <td style="width:50%;padding:12px;vertical-align:middle;">
-              ${productData.cosmeticsDescription2.ro}
+              ${cosmeticsDescription2}
             </td>
           </tr>
 
           <tr>
             <td colspan="2" style="padding:12px;vertical-align:top;">
               ${productData.ingredientsTable[0].ingredient.ro !== "" ? `
-                <table class="table" style="margin-top:10px;width:100%;border-collapse:collapse;">
-                  <tbody>
-                    <tr class="tablehead">
-                      <td><strong>Informații suplimentare</strong></td>
-                      <td><strong>Cantitate per porție</strong></td>
-                      <td><strong>VNR</strong></td>
-                    </tr>
-                    ${ingredientsHTML}
-                  </tbody>
-                </table>
-                ${productData.tableEnd.ro}
+                <table class="table" style="margin-top: 10px">
+       <p><b>Ingrediente ${productData.portion.portionAmount} ${productData.portion.unit.ro
+      } RWS</b></p>
+        <p><b>_________________________________________________</b></p>
+        ${ingredientsHTML}
+        <p><b>_________________________________________________</b></p>
+        ${productData.tableEnd.ro}
+    </table>
               ` : ""}
 
-              ${transformedListHTML}
-              ${productData.cosmeticsDescription4.ro}
+              ${replaceH3WithH2(transformedListHTML)}
+              ${cosmeticsDescription4}
             </td>
           </tr>
         </tbody>

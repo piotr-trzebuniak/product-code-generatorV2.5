@@ -482,12 +482,12 @@ export const categories = [
   },
   {
     index: 97,
-    value: 1728999,
+    value: 2844784,
     label: "Delikatesy / Kawa, herbata i kakao / Herbata",
   },
   {
     index: 98,
-    value: 1728999,
+    value: 2844787,
     label: "Delikatesy / Kawa, herbata i kakao / Kawa",
   }
 ];
