@@ -168,9 +168,9 @@ export const generateBlHtml = (productData) => {
     </div>
     <div class="item item-6">
       <section class="text-item">
-      <h2>Przeciwwskazania:</h2>
+      <h2>Przeciwwskazania</h2>
         ${productData.contraindications.pl}
-        <h2>Przechowywanie:</h2>
+        <h2>Przechowywanie</h2>
         ${productData.storage.pl}
       </section>
     </div>
