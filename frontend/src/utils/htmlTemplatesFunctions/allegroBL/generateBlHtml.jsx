@@ -67,7 +67,7 @@ export const generateSpecialFeaturesList = (specialFeatures) => {
     .map((key) => `<p>⭐ ${featureNames[key]}</p>`)
     .join(""); // skleja <li>...</li> w jeden ciąg
 
-  return list ? `<h2>Cechy specjalne:</h2>${list}` : "";
+  return list ? `<h2>Cechy specjalne</h2>${list}` : "";
 };
 
 function convertListToSection(html) {
@@ -154,7 +154,7 @@ export const generateBlHtml = (productData) => {
         <p>Porcja jednorazowa: <b>${productData.portion.portionAmount} ${productData.portion.unit.pl
     }</b></p>
         <p>Ilość porcji w opakowaniu: <b>${productData.portionQuantity}</b></p>
-        <h2>Sposób użycia:</h2>
+        <h2>Sposób użycia</h2>
         ${productData.howToUse.pl}
       </section>
     </div>
