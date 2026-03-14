@@ -113,7 +113,6 @@ function generateResearchHTML(data) {
           (study, index) => `
         <h5>${index + 1}. ${study.title}</h5>
         <p><strong>Beschreibung:</strong> ${study.description}</p>
-        <p><strong>Link: </strong>${study.link}</p>
       `
         )
         .join('')}
