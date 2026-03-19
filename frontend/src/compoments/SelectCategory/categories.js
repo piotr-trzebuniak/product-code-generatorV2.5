@@ -489,5 +489,35 @@ export const categories = [
     index: 98,
     value: 2844787,
     label: "Delikatesy / Kawa, herbata i kakao / Kawa",
+  },
+    {
+    index: 99,
+    value: 3096584,
+    label: "Gastronomia, napoje / Napoje bezalkoholowe / Soki, koktajle mleczne, smoothie",
+  },
+  {
+    index: 100,
+    value: 3096585,
+    label: "Zioła i przyprawy / Pojedyncze opakowania",
+  },
+  {
+    index: 101,
+    value: 3096586,
+    label: "Dom i ogród / Ogród i taras / Baseny, sauny i wanny z hydromasażem / Akcesoria do sauny",
+  },
+  {
+    index: 102,
+    value: 3096587,
+    label: "Zdrowie i uroda / Naturalne i alternatywne środki lecznicze / Aromaterapia",
+  },
+  {
+    index: 103,
+    value: 3096588,
+    label: "Słodycze i czekolada / Słodycze / Inne",
+  },
+  {
+    index: 104,
+    value: 3096589,
+    label: "Smakosze / Żywność /  Olej spożywczy",
   }
 ];

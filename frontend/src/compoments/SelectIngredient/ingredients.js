@@ -2859,4 +2859,74 @@ export const ingredients = [
     },
     label: "Cynamon",
   },
+  {
+    index: 209,
+    value: {
+      name: "Białko serwatkowe (Whey)",
+      bulletpoints: [
+        "Wspiera szybką syntezę białek mięśniowych dzięki wysokiej zawartości aminokwasów rozgałęzionych (BCAA), co przyspiesza regenerację po wysiłku fizycznym.",
+        "Wspomaga funkcjonowanie układu odpornościowego poprzez podnoszenie poziomu glutationu, który jest kluczowym przeciwutleniaczem w organizmie.",
+        "Przyczynia się do efektywnej kontroli masy ciała poprzez zwiększenie uczucia sytości i nasilenie termogenezy poposiłkowej.",
+        "Poprawia metabolizm glukozy i wrażliwość na insulinę, co wspiera stabilizację poziomu cukru we krwi po posiłkach.",
+        "Działa wspomagająco na utrzymanie masy kostnej, dostarczając niezbędnych budulców do mineralizacji tkanki kostnej u osób w każdym wieku.",
+      ],
+    },
+    label: "Białko serwatkowe",
+  },
+  {
+    index: 210,
+    value: {
+      name: "Biotyna",
+      bulletpoints: [
+        "Wspiera produkcję keratyny, głównego białka budulcowego, co bezpośrednio poprawia strukturę włosów, zwiększa ich grubość oraz hamuje nadmierne wypadanie.",
+        "Przyczynia się do wzmocnienia płytki paznokcia, zwiększając jej twardość i odporność na pękanie oraz rozwarstwianie się.",
+        "Wspomaga regenerację komórek skóry i utrzymuje jej prawidłowe nawilżenie, co pomaga w walce z przesuszeniem oraz poprawia ogólny koloryt cery.",
+        "Poprawia metabolizm lipidów w skórze, co wspiera naturalną barierę ochronną i może łagodzić objawy nadmiernej aktywności gruczołów łojowych.",
+        "Wspiera procesy gojenia i odnowy tkanek dzięki udziałowi w syntezie kwasów nukleinowych, co jest kluczowe dla szybkiej regeneracji naskórka po mikrourazach.",
+      ],
+    },
+    label: "Biotyna",
+  },
+  {
+    index: 211,
+    value: {
+      name: "Sylimaryna",
+      bulletpoints: [
+        "Wspiera naturalne procesy regeneracyjne wątroby, stymulując syntezę białek w hepatocytach, co sprzyja odbudowie uszkodzonych komórek tego narządu.",
+        "Działa jako silny przeciwutleniacz, neutralizując wolne rodniki i chroniąc błony komórkowe przed peroksydacją lipidów oraz uszkodzeniami toksycznymi.",
+        "Przyczynia się do utrzymania prawidłowych funkcji oczyszczających organizmu, wspomagając usuwanie szkodliwych produktów przemiany materii i toksyn środowiskowych.",
+        "Wspomaga procesy trawienne poprzez stymulację wydzielania żółci, co ułatwia metabolizm tłuszczów i poprawia komfort po posiłku.",
+        "Wspiera utrzymanie prawidłowego poziomu glukozy we krwi, wpływając korzystnie na gospodarkę insulinową i metabolizm węglowodanów.",
+      ],
+    },
+    label: "Sylimaryna",
+  },
+  {
+    index: 212,
+    value: {
+      name: "Bisglicynian magnezu",
+      bulletpoints: [
+        "Wspiera prawidłowe funkcjonowanie układu nerwowego, pomagając w redukcji uczucia zmęczenia i znużenia oraz poprawiając odporność na stres.",
+        "Przyczynia się do utrzymania prawidłowego metabolizmu energetycznego, uczestnicząc w procesach wytwarzania cząsteczek ATP w komórkach.",
+        "Wspomaga efektywną pracę mięśni i ich regenerację, zapobiegając bolesnym skurczom oraz wspierając prawidłowe przewodnictwo nerwowo-mięśniowe.",
+        "Wpływa korzystnie na jakość snu i procesy wyciszenia organizmu dzięki obecności glicyny, która działa kojąco na ośrodkowy układ nerwowy.",
+        "Pomaga w utrzymaniu zdrowych kości i zębów, optymalizując gospodarkę wapniową oraz wspierając mineralizację tkanki kostnej.",
+      ],
+    },
+    label: "Bisglicynian magnezu",
+  },
+  {
+    index: 213,
+    value: {
+      name: "Węglan wapnia",
+      bulletpoints: [
+        "Stanowi podstawowy materiał budulcowy kości i zębów, wspierając ich prawidłową gęstość mineralną oraz wytrzymałość mechaniczną.",
+        "Wspiera prawidłowe przekaźnictwo nerwowe, umożliwiając sprawną komunikację między komórkami nerwowymi a mięśniami.",
+        "Przyczynia się do utrzymania prawidłowego krzepnięcia krwi, biorąc udział w kaskadzie reakcji niezbędnych do domykania naczyń krwionośnych.",
+        "Wspomaga funkcjonowanie mięśni, w tym mięśnia sercowego, poprzez regulację procesów skurczu i rozkurczu włókien mięśniowych.",
+        "Pomaga w utrzymaniu prawidłowego metabolizmu energetycznego oraz wspiera działanie enzymów trawiennych w układzie pokarmowym.",
+      ],
+    },
+    label: "Węglan wapnia",
+  }
 ];
