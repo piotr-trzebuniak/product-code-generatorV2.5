@@ -90,13 +90,18 @@ export async function getRowDefBySku({ sku, sheetName = DEFAULT_SHEET_NAME }) {
   const row = index.get(normalized);
   if (!row) return { found: false, reason: "not_found", sku: normalized };
 
-  // D,E,F z konkretnego wiersza (nazwa arkusza w apostrofach, bo ma spację)
+  // D..K z konkretnego wiersza (nazwa arkusza w apostrofach, bo ma spację)
+  //   D=nazwa, E=krótki opis, F=html, G=Producent (marka),
+  //   J=cechy specjalne, K=nie zawiera
   const resp = await sheets.spreadsheets.values.get({
     spreadsheetId: SPREADSHEET_ID,
-    range: `'${sheetName}'!D${row}:F${row}`,
+    range: `'${sheetName}'!D${row}:K${row}`,
   });
 
-  const [D = "", E = "", F = ""] = resp.data.values?.[0] || [];
+  const r = resp.data.values?.[0] || [];
+  const [D = "", E = "", F = "", G = ""] = r;
+  const J = r[6] ?? ""; // kolumna J — cechy specjalne
+  const K = r[7] ?? ""; // kolumna K — nie zawiera
 
-  return { found: true, sku: normalized, row, D, E, F };
+  return { found: true, sku: normalized, row, D, E, F, G, J, K };
 }
